@@ -84,3 +84,10 @@ Kubernetes service
         Build an image: docker build -t ps07/client . (in client dir)
         Push it to docker hub: docker push ps07/client
         Run the deployment: kubectl apply -f client-depl.yaml (in infra\k8s dir)
+
+Skaffold
+    It automates the Rebuild process whenever some code is changed.
+    Install Chocolatey
+    Install Skaffold: choco install skaffold
+    Run: skaffold dev (in blog dir) [run again if some errors prompt]
+    Cleanup: skaffold delete
