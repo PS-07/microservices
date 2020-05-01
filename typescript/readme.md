@@ -19,7 +19,9 @@
 
 ## Parcel Bundler
 
-    It is a tool to help us run Typescript in browser. It looks for a 'script' tag in indexe.html file that points to a .ts file. Parcel Bundler then converts it into a .js file and renders it to the browser.
+    It is a tool to help us run Typescript in browser. It looks for a
+    'script' tag in indexe.html file that points to a .ts file.
+    Parcel Bundler then converts it into a .js file and renders it to the browser.
     mkdir maps (inside typescript dir)
     cd maps
     Install: npm install -g parcel-bundler
