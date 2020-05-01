@@ -43,3 +43,7 @@
       [ https://maps.googleapis.com/maps/api/js?key={key} ]
     - Integration with Typescript
       npm install @types/googlemaps
+
+## Run app
+
+    parcel index.html
