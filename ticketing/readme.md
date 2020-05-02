@@ -17,3 +17,4 @@
         To remove 'Your connection is not private' error,
         click anywhere on the page and type 'thisisunsafe'
         npm install express-validator
+        npm install express-async-errors
