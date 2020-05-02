@@ -18,3 +18,5 @@
         click anywhere on the page and type 'thisisunsafe'
         npm install express-validator
         npm install express-async-errors
+        npm install mongoose
+        npm install @types/mongoose
