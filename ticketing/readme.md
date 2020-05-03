@@ -20,3 +20,6 @@
         npm install express-async-errors
         npm install mongoose
         npm install @types/mongoose
+        npm install cookie-session @types/cookie-session
+        npm install jsonwebtoken @types/jsonwebtoken
+        kubectl create secret generic jwt-secret --from-literal=JWT_KEY=asdf (in ticketing)
