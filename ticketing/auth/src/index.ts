@@ -45,6 +45,9 @@ const start = async () => {
         throw new Error('JWT_KEY must be defined');
     }
 
+    // mongoose is used to connect to a MongoDb instance
+    // using the ClusterIP service of the database (auth-mongo-srv)
+    // '/auth' at the end creates a database named auth
     try {
         await mongoose.connect('mongodb://auth-mongo-srv:27017/auth', {
             useNewUrlParser: true,

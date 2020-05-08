@@ -84,7 +84,7 @@ Auth Service
         src
             errors
             middlewares
-            models
+            models - Mongoose User Model
             routes - a file for each 4 routes and it exports the corresponding routers to src/index.ts fole
             services
 
@@ -97,3 +97,22 @@ Auth Service
             abstact statusCode: number;
             abstract serializeErrors(): { message: string; field?: string }[];
         every error class will extend the abstact CustomError class (to avoid implementation mistakes)
+
+    Database (MongoDb)
+        dir - infra/k8s/auth-mongo-depl.yaml    (deployment for MongoDb database for auth service)
+              it creates a pod (a MongoDb instance); also a ClusterIP service to connect to the pod
+              port: 27017 (default port for MongoDb)
+              mongoose is used to connect to a MongoDb instance (mongoose.connect)
+
+    SignUp
+        1. ReactApp(client) makes a request with { email, password }
+        2. Check if user with this email exists? if yes, respond with an error (ckeck User Collection in db)
+           To access the User Collection, a mongoose User model needs to be created
+        3. Hash the password
+        4. Create a new User and save it to the db (again mongoose User model will be used)
+        5. User is now logged in, send them a cookie/JWT (JSON Web Token)
+
+        User Collection will contain all the users: User#1, User#2, User#3, .... 
+        Mongoose User Document - represents one single user
+        Mongoose User Model - represents entire User Collection
+           

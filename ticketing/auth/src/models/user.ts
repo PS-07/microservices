@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { Password } from '../services/password';
 
 // An interface that describes the properties
-// that are requried to create a new User
+// that are requried to create a new User (for typescript)
 interface UserAttrs {
     email: string;
     password: string;
@@ -21,6 +21,7 @@ interface UserDoc extends mongoose.Document {
     password: string;
 }
 
+// Schema is how we tell mongoose about all the properties of user
 const userSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -49,10 +50,13 @@ userSchema.pre('save', async function (done) {
     done();
 });
 
+// we add a custom function 'build' to a model
 userSchema.statics.build = (attrs: UserAttrs) => {
     return new User(attrs);
 };
 
+// definition of mongoose.model:
+// function model<T extends Document, U extends Model<T>> (...): U;
 const User = mongoose.model<UserDoc, UserModel>('User', userSchema);
 
 export { User };
