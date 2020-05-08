@@ -28,6 +28,12 @@ app.use(signinRouter);
 app.use(signoutRouter);
 app.use(signupRouter);
 
+// NotFoundError will be thrown incase of any invalid URL
+// since all 4 valid routes have been checked prior to this, any other
+// wrong URL would invoke it. 'all' is used to every type of req i.e. GET, POST etc.
+
+// the 'express-async-errors' package allows changes how express handlers route handlers
+// not this async func will await to listen to any error (else we would have used next function)
 app.all('*', async (req, res) => {
     throw new NotFoundError();
 });

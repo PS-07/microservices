@@ -1,6 +1,10 @@
 import { ValidationError } from 'express-validator';
 import { CustomError } from './custom-error';
 
+
+// ValidationError has some specific properties, but we need to convert
+// it into our consistent error structure => { errors: { message: string, field?: string} [] }
+// this process is done in serializeErrors()
 export class RequestValidationError extends CustomError {
     statusCode = 400;
 

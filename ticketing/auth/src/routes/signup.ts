@@ -8,6 +8,11 @@ import { BadRequestError } from '../errors/bad-request-error';
 
 const router = express.Router();
 
+// the 'express-validator' lib is used to validate email and password from incoming request
+// the validation is applied as a middleware to thr POST request (in 2nd argument)
+// body('email') extracts the email property from the body of the incoming request, same for password
+
+// to communicate the results of validation to the user, 'validateRequest' middleware is imported
 router.post(
     '/api/users/signup',
     [
