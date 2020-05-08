@@ -33,6 +33,24 @@ Skaffold
                 it will sync all the files in there with appropriate container in the cluster
     run - skaffold dev (in ticketing dir)
 
+Ingress-Nginx
+    To access a running server (any pod in our cluster), we can:
+        1. set up NodePort service
+        2. Ingress service - it has routing rules tied to Nginx
+    dir - infra/k8s/ingress-srv.yaml
+    use - anytime a request comes in to the cluster, it will be handled by the Ingress service and
+          it will be routed off to the appropriate service within the cluster  
+
+Host file edit and security warning
+    dir - C:\Windows\System32\drivers\etc\hosts
+    Edit the 'hosts' file by adding a line at the bottom:
+        {IP} ticketing.dev
+    [get the {IP} by running minikube ip command] 
+
+    goto http://ticketing.dev
+    when prompted with the 'Your connection is not private' error,
+    click anywhere on the page and type 'thisisunsafe' 
+
 Auth Service
     Structure
             Route              Method           Body                   Purpose
