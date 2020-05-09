@@ -32,10 +32,14 @@ router.post(
             throw new BadRequestError('Email in use');
         }
 
+        // build and save the user to db
         const user = User.build({ email, password });
         await user.save();
 
         // Generate JWT
+        // the payload in JWT will have id and email (user info)
+        // the second arg is a secret key, a ! is used at the end because we've already checked
+        // that secret key exists in index.ts file and we don't want typescript to give an error
         const userJwt = jwt.sign({
             id: user.id,
             email: user.email

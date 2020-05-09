@@ -22,6 +22,8 @@ interface UserDoc extends mongoose.Document {
 }
 
 // Schema is how we tell mongoose about all the properties of user
+// the second arg transforms the response structure received from the
+// MongoDb database to like a common db response: { "_id": "...", "email": "..."}
 const userSchema = new mongoose.Schema({
     email: {
         type: String,

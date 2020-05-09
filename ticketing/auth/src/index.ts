@@ -14,8 +14,13 @@ import { NotFoundError } from './errors/not-found-error';
 const app = express();
 
 // Middlewares
+// since traffic is being proxied to the app through Ingress-Nginx, so express will raise an issue
+// this command tells express to trust the connection even though it is proxied
 app.set('trust proxy', true);
 app.use(json());
+
+// signed: false -> cookie will not be encrypted, since JWT is by defualt encrypted
+// secure: true  -> cookies will only be used if user visits the app on https connection
 app.use(
     cookieSession({
         signed: false,
@@ -41,6 +46,7 @@ app.all('*', async (req, res) => {
 app.use(errorHandler);
 
 const start = async () => {
+    // check if the secret key is defined
     if (!process.env.JWT_KEY) {
         throw new Error('JWT_KEY must be defined');
     }

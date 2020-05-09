@@ -14,5 +14,7 @@ export const validateRequest = (
     if (!errors.isEmpty()) {
         throw new RequestValidationError(errors.array());
     }
+
+    // next() fuuntion is called to move onto the next middleware
     next();
 };
