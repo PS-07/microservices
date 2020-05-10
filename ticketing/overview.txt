@@ -112,7 +112,7 @@ Auth Service
             errors
             middlewares
             models - Mongoose User Model
-            routes - a file for each 4 routes and it exports the corresponding routers to src/index.ts fole
+            routes - a file for each 4 routes and it exports the corresponding routers to src/index.ts file
             services
 
     Error Handling
