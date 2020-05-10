@@ -129,6 +129,7 @@ Auth Service
             models - Mongoose User Model
             routes - a file for each 4 routes and it exports the corresponding routers to src/index.ts file
             services
+            test
 
     Error Handling
         error should have a consistent structured response from all servers
@@ -174,3 +175,22 @@ Auth Service
     SignOut
         1. ReactApp(client) makes a SignOut request
         2. Destroy the session
+
+    Testing
+        We are running the tests directly from the terminal without using docker
+        dir - test files of each dir will be in __test__ dir inside the dir
+        Run command: >  npm run test         (in auth dir)
+        It will start a test runner called Jest that will execute the tests
+            1. Start in-memory copy of MongoDb
+            2. Start up the express app
+            3. Use supertest lib to make requests
+            4. Run assertions to make sure the request did the right thing
+        
+        The index.js file is refractored to separate the app part in app.js
+        app.js - express app that is not listening on any port
+        index.js - import app.js, start app, and listen on port 3000
+        test files - ipmort app.js, test app with supertest listening on some random port 
+                     (so we can perform multiple services' test in parallel on different ports)
+        
+        The testing Initialization is done with the --save-dev so that we don't have to reinstall it (since it is large)
+        The Dockerfile edit: [ RUN npm install--only=prod ] will ensure the command runs only in production mode 

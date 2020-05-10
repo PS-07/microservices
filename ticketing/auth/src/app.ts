@@ -20,6 +20,7 @@ app.use(json());
 
 // signed: false -> cookie will not be encrypted, since JWT is by defualt encrypted
 // secure: true  -> cookies will only be used if user visits the app on https connection
+// we won't check the connection when in test env
 app.use(
     cookieSession({
         signed: false,
