@@ -218,6 +218,7 @@ Client
         pages - every file inside pages is a route 
                 ex. abc.js points to the route https://ticketing.dev//abc
                 except index.js points to the default route https://ticketing.dev
+        hooks
 
     File change detection
         NextJS sometimes does not capture a file change when running inside a docker container
@@ -229,3 +230,8 @@ Client
         To import any Global CSS such as Bootstrap, it should be included only in 'pages/_app.js' file
         This will apply Bootstrap to every page inside the pages dir
     
+    The useRequest hook
+        dir - hooks/use-request.js
+        use - a generalized hook for all kinds of requests such as get, post etc.
+              input - { url, method, body }
+              output - { doRequest, errors }
