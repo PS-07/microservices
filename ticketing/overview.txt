@@ -100,7 +100,22 @@ Auth Service
         >  npm install @types/mongoose
         >  npm install cookie-session @types/cookie-session
         >  npm install jsonwebtoken @types/jsonwebtoken
-        
+        >  npm install --save-dev @types/jest @types/supertest jest ts-jest supertest mongodb-memory-server
+        Dockerfile edit - RUN npm install --only=prod
+        package.json edit
+            "scripts": {
+                "start": "ts-node-dev --poll src/index.ts"
+                "test": "jest --watchAll --no-cache"
+            },
+            "jest": {
+                "preset": "ts-jest",
+                "testEnvironment": "node",
+                "setupFilesAfterEnv": [
+                    "./src/test/setup.ts"
+                ]
+            }
+        Run tests - npm run test (in auth dir)
+
         Goto ticketing.dev/api/users/currentuser
         To remove 'Your connection is not private' error,
         click anywhere on the page and type 'thisisunsafe'
