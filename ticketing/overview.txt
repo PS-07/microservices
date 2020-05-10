@@ -78,6 +78,11 @@ Database common response
             "email": "..."  }
     for ex. MongoDb returns a structure: { "_id": "...", "email": "...", "password": "...", "__v": "..."}
 
+Server Side Redndering (NextJS)
+    When user types 'ticketing.dev' in browser, the browser sends a 'GET ticketing.dev' request.
+    The NextJS (client) gets the request and forwards it to the appropriate service
+    Finally NextJS sends a response back to the browser as a fully rendered HTML file with content
+
 Auth Service
     Structure
             Route              Method           Body                   Purpose
@@ -104,7 +109,7 @@ Auth Service
         Dockerfile edit - RUN npm install --only=prod
         package.json edit
             "scripts": {
-                "start": "ts-node-dev --poll src/index.ts"
+                "start": "ts-node-dev --poll src/index.ts",
                 "test": "jest --watchAll --no-cache"
             },
             "jest": {
@@ -193,4 +198,34 @@ Auth Service
                      (so we can perform multiple services' test in parallel on different ports)
         
         The testing Initialization is done with the --save-dev so that we don't have to reinstall it (since it is large)
-        The Dockerfile edit: [ RUN npm install--only=prod ] will ensure the command runs only in production mode 
+        The Dockerfile edit: [ RUN npm install--only=prod ] will ensure the command runs only in production mode
+
+
+Client
+    Initialization
+        >  npm init -y
+        >  npm install react react-dom next
+        package.json edit
+            "scripts": {
+                "dev": "next"
+            },
+        >  docker build -t ps07/client .
+        >  docker push ps07/client
+        >  npm install bootstrap
+        >  npm install axios
+
+    Workflow
+        pages - every file inside pages is a route 
+                ex. abc.js points to the route https://ticketing.dev//abc
+                except index.js points to the default route https://ticketing.dev
+
+    File change detection
+        NextJS sometimes does not capture a file change when running inside a docker container
+        To fix this issue, a 'next.config.js' file is created which polls all the files every 300ms
+        rather than looking for any file changes.
+        To apply this file, kill the client pod and it will automatically restart with this file applied
+
+    Global CSS (Bootstrap)
+        To import any Global CSS such as Bootstrap, it should be included only in 'pages/_app.js' file
+        This will apply Bootstrap to every page inside the pages dir
+    
