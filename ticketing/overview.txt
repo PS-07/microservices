@@ -309,5 +309,25 @@ Common
     Initialization
         >  npm init -y
         package.json edit:
-            "name": "@pstickets/common"
+            "name": "@pstickets/common",
+            "main": "./build/index.js",
+            "types": "./build/index.d.ts",
+            "files": [
+                "./build/**/*"
+            ],
+            "scripts": {
+                "clean": "del-cli ./build/*",
+                "build": "npm run clean && tsc"
+            }
         >  npm login
+        >  npm publish --access public
+        >  tsc --init
+        >  npm install typescript del-cli --save-dev
+        tsconfig.json edit:
+            "compilerOptions": {
+                ---
+                "declaration": true,
+                "outDir": "./build",
+                ---
+            }
+        >  npm run build
