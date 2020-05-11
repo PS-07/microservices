@@ -238,6 +238,7 @@ Fetching data during SSR
             communication protocol: http://IP_address
         
     Hence we can use different baseUrl depending on which environment we're in (browser/server)
+    To check whether in browser/server: window variable is only defined in browser
 
 Calling getInitialProps
     getInitialProps is executed on server when:
@@ -246,7 +247,6 @@ Calling getInitialProps
         3. Typing URL into address bar
     getInitialProps is executed on browser when:
         1. Navigating from one page to another while in the app
-    To check whether in browser/server: window variable is only defined in browser
 
 Handling multiple getInitialProps
     getInitialProps has different meaning of context in:
@@ -301,4 +301,13 @@ Client
         dir - pages/_app.js
         use - to show elements that would be visible on every single page such as Bootstrap and header
 
-              
+Code Sharing
+    To share code between our microservices, create a NPM registry
+    Login at http://npmjs.com and 'Add Organiztion' - pstickets (public)
+
+Common
+    Initialization
+        >  npm init -y
+        package.json edit:
+            "name": "@pstickets/common"
+        >  npm login
