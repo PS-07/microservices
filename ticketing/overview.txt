@@ -89,8 +89,8 @@ Auth Service
 
     Initialization
         >  npm init -y
-        npm install typescript ts-node-dev express @types/express
-        tsc --init
+        >  npm install typescript ts-node-dev express @types/express
+        >  tsc --init
         In 'package.json' file, edit "scripts" tag to look like:
             "scripts": {
                 "start": "ts-node-dev --poll src/index.ts"
@@ -123,6 +123,8 @@ Auth Service
         
         >  kubectl create secret generic jwt-secret --from-literal=JWT_KEY=asdf (in ticketing)
     
+        >  npm install @pstickets/common
+
     Workflow
         src
             errors
