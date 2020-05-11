@@ -308,6 +308,8 @@ Code Sharing
     Login at http://npmjs.com and 'Add Organiztion' - pstickets (public)
     Login npm: >  npm login
     Publish package: >  npm run pub     (in common dir)
+    Install package: >  npm install @pstickets/common       (in other dirs)
+    Update package:  >  npm update @pstickets/common    (when an change is made in common dir code)
 
 Common
     Initialization

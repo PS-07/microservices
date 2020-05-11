@@ -1,11 +1,10 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import jwt from 'jsonwebtoken';
+import { validateRequest, BadRequestError } from '@pstickets/common';
 
 import { User } from '../models/user';
 import { Password } from '../services/password';
-import { validateRequest } from '@pstickets/common';
-import { BadRequestError } from '@pstickets/common';
 
 const router = express.Router();
 router.post('/api/users/signin',
