@@ -80,7 +80,9 @@ Database common response
 
 Server Side Redndering (NextJS)
     When user types 'ticketing.dev' in browser, the browser sends a 'GET ticketing.dev' request.
-    The NextJS (client) gets the request and forwards it to the appropriate service
+    NextJS inspects the URL and determines which component to show (in client/pages dir)
+    Call those component's 'getInitialProps' static method (any data retured from it will be passed as props to the component)
+    Render each component with data from getInitialProps one time 
     Finally NextJS sends a response back to the browser as a fully rendered HTML file with content
 
 Auth Service
@@ -233,5 +235,15 @@ Client
     The useRequest hook
         dir - hooks/use-request.js
         use - a generalized hook for all kinds of requests such as get, post etc.
-              input - { url, method, body }
+              input - { url, method, body, onSuccess }
               output - { doRequest, errors }
+
+    Pages
+        SignUp
+            dir - pages/auth/signup.js
+            route - ticketing.dev/auth/signup
+            use - takes email and password as input. if credetials are wrong, throws error
+                  if credetials are right, user is signed in and routed to ticketing.dev/
+
+
+    http://kube-dns.kube-system.svc.cluster.local
