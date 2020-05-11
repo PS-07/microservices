@@ -6,9 +6,8 @@ const LandingPage = ({ currentUser }) => {
         : (<h1>You are NOT signed in</h1>));
 };
 
-// first arg is refered to context i.e. here context = { req }
+// first arg is refered to context i.e. here context = { req, res }
 LandingPage.getInitialProps = async (context) => {
-    console.log('Landing page');
     const client = buildClient(context);
     const { data } = await client.get('/api/users/currentuser');
     return data;

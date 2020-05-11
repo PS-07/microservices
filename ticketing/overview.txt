@@ -78,12 +78,6 @@ Database common response
             "email": "..."  }
     for ex. MongoDb returns a structure: { "_id": "...", "email": "...", "password": "...", "__v": "..."}
 
-Server Side Redndering (NextJS)
-    When user types 'ticketing.dev' in browser, the browser sends a 'GET ticketing.dev' request.
-    NextJS inspects the URL and determines which component to show (in client/pages dir)
-    Call those component's 'getInitialProps' static method (any data retured from it will be passed as props to the component)
-    Render each component with data from getInitialProps one time 
-    Finally NextJS sends a response back to the browser as a fully rendered HTML file with content
 
 Auth Service
     Structure
@@ -203,6 +197,65 @@ Auth Service
         The Dockerfile edit: [ RUN npm install--only=prod ] will ensure the command runs only in production mode
 
 
+Server Side Redndering (NextJS)
+    When user types 'ticketing.dev' in browser, the browser sends a 'GET ticketing.dev' request.
+    NextJS inspects the URL and determines which component to show (in client/pages dir)
+    Call those component's 'getInitialProps' static method (any data retured from it will be passed as props to the component)
+    Render each component with data from getInitialProps one time 
+    Finally NextJS sends a response back to the browser as a fully rendered HTML file with content
+
+Fetching data during SSR
+    Request by browser
+        When browser makes a request, say [GET /api/users/currentuser],
+        the browser adds a baseUrl: [https://ticketing.dev/api/users/currentuser],
+        then network layer changes it to: [https://{minikube ip}/api/users/currentuser],
+        and it is forwarded to Ingress-Nginx, and then to appropriate service
+
+    Request by server (in Client pod)
+        Problem
+        When server (NextJS app) makes a request, say [GET /api/users/currentuser],
+        the node's networking layer adds a default baseUrl: [GET localhost:80/api/users/currentuser],
+        but since the NextJS app is inside a container, localhost:80 is inside the container, not the browser
+        and since nothing is listening on localhost:80 inside the container, we get an error
+
+        Solution
+        The NextJS app should reach out to Ingress-Nginx, which is running inside the cluster
+        then Ingress-Nginx will figure out the domain based on the request
+            
+            Cross Namespace Communication
+            Within a namespace, pods can communicate using ClusterIP service
+            here we have two namespaces (in minikube):
+                default: pods running - client, auth, etc. (all microservices)
+                kube-system: pods running - nginx-ingress-controller-{id}
+            communication protocol: http://SERVICENAME.NAMESPACE.svc.cluster.local (general)
+            it's a bit different in minikube:
+            Get Ingress-Nginx namespace: (kube-system)
+                >  kubectl get namespaces
+            Get pod: (nginx-ingress-controller-{id}) 
+                >  kubectl get pods -n kube-system
+            Get IP_address:
+                >  kubectl describe pod nginx-ingress-controller-{id} -n kube-system
+            communication protocol: http://IP_address
+        
+    Hence we can use different baseUrl depending on which environment we're in (browser/server)
+
+Calling getInitialProps
+    getInitialProps is executed on server when:
+        1. Hard refresh on page
+        2. Clicking link from different domain
+        3. Typing URL into address bar
+    getInitialProps is executed on browser when:
+        1. Navigating from one page to another while in the app
+    To check whether in browser/server: window variable is only defined in browser
+
+Handling multiple getInitialProps
+    getInitialProps has different meaning of context in:
+        page component - context === { req,res }
+        app component  - context === { Component, ctx: { req, res } }
+    so we will fetch the data in app component's getInitialProps and then pass
+    down the necessary props to the getInitialProps of the page components that requires it
+
+
 Client
     Initialization
         >  npm init -y
@@ -238,12 +291,14 @@ Client
               input - { url, method, body, onSuccess }
               output - { doRequest, errors }
 
-    Pages
-        SignUp
-            dir - pages/auth/signup.js
-            route - ticketing.dev/auth/signup
-            use - takes email and password as input. if credetials are wrong, throws error
-                  if credetials are right, user is signed in and routed to ticketing.dev/
+    BuildClient API
+        dir - api/build-client.js
+        use - takes an incoming request and returns a preconfigured version of axios
+              server - sets baseUrl: http://IP_address (from Ingress-Nginx pod), sets header (cookie)
+              browser - sets baseUrl: /
 
+    AppComponent
+        dir - pages/_app.js
+        use - to show elements that would be visible on every single page such as Bootstrap and header
 
-    http://kube-dns.kube-system.svc.cluster.local
+              
