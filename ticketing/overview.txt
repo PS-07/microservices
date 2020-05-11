@@ -304,10 +304,14 @@ Client
 Code Sharing
     To share code between our microservices, create a NPM registry
     Login at http://npmjs.com and 'Add Organiztion' - pstickets (public)
+    Login npm: >  npm login
+    Publish package: >  npm run pub     (in common dir)
 
 Common
     Initialization
         >  npm init -y
+        >  npm install express express-validator cookie-session jsonwebtoken
+        >  npm install @types/cookie-session @types/express @types/jsonwebtoken
         package.json edit:
             "name": "@pstickets/common",
             "main": "./build/index.js",
@@ -317,10 +321,10 @@ Common
             ],
             "scripts": {
                 "clean": "del-cli ./build/*",
-                "build": "npm run clean && tsc"
+                "build": "npm run clean && tsc",
+                "pub": "npm version patch && npm run build && npm publish --access public"
             }
         >  npm login
-        >  npm publish --access public
         >  tsc --init
         >  npm install typescript del-cli --save-dev
         tsconfig.json edit:
@@ -330,4 +334,5 @@ Common
                 "outDir": "./build",
                 ---
             }
-        >  npm run build
+        >  tsc
+        >  npm run pub
