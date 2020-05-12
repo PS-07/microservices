@@ -342,6 +342,13 @@ Common
         >  npm run pub
 
 Tickets
+    Structure
+            Route            Method          Body                 Purpose
+        /api/tickets          GET            ----           Retrieve all tickets
+        /api/tickets/:id      GET            ----           Retrieve ticket with specific ID
+        /api/tickets          POST      { title, price }    Create a ticket
+        /api/tickets          PUT       { title, price }    Edit a ticket
+
     Initialization
         Copy: src/app.ts, src/index.ts, src/test, .dockerignore, Dockerfile, 
               package.json, package-lock.json, tsconfig.json from auth dir

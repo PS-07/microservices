@@ -1,13 +1,14 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import request from 'supertest';
+import jwt from 'jsonwebtoken';
 import { app } from '../app';
 
 // add a global getCookie() function
 declare global {
     namespace NodeJS {
         interface Global {
-            getCookie(): Promise<string[]>;
+            getCookie(): string[];
         }
     }
 }
@@ -40,16 +41,30 @@ afterAll(async () => {
     await mongoose.connection.close();
 });
 
-// getCookie() return the cookie received by browser while signup/signin
-global.getCookie = async () => {
-    const email = 'test@test.com';
-    const password = 'password';
+// getCookie() returns a cookie
+// since a cookie is generated when a user signup/signin, so we will have to replicate it
+// for testing. but then we would use auth service. since we should avoid communication between
+// microservices, we will generate a cookie with some other fake way (with using auth service)
+global.getCookie = () => {
+    // build a JWT payload: { id, email }
+    const payload = {
+        id: 'ion2o3r4',
+        email: 'test958@test.com'
+    };
 
-    const response = await request(app)
-        .post('/api/users/signup')
-        .send({ email, password })
-        .expect(201);
+    // create the JWT
+    const token = jwt.sign(payload, process.env.JWT_KEY!);
 
-    const cookie = response.get('Set-Cookie');
-    return cookie;
+    // build session object: { jwt: JWT }
+    const session = { jwt: token };
+
+    // turn the session object into JSON
+    const sessionJSON = JSON.stringify(session);
+
+    // take JSON and encoode it into base64
+    const base64 = Buffer.from(sessionJSON).toString('base64');
+
+    // return a string thats the cookie with encoded data
+    const cookie = `express:sess=${base64}`;
+    return [cookie];
 };
