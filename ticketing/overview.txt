@@ -340,3 +340,14 @@ Common
             }
         >  tsc
         >  npm run pub
+
+Tickets
+    Initialization
+        Copy: src/app.ts, src/index.ts, src/test, .dockerignore, Dockerfile, 
+              package.json, package-lock.json, tsconfig.json from auth dir
+              (Remove unecessary code from all the files)
+        package.json edit:
+            "name": "tickets"
+        >  npm install
+        >  docker build -t ps07/tickets .
+        >  docker push ps07/tickets
