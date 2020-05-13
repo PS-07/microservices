@@ -214,6 +214,7 @@ Fetching data during SSR
         and it is forwarded to Ingress-Nginx, and then to appropriate service
 
     Request by server (in Client pod)
+        dir = client/api/build-client.js
         Problem
         When server (NextJS app) makes a request, say [GET /api/users/currentuser],
         the node's networking layer adds a default baseUrl: [GET localhost:80/api/users/currentuser],
@@ -358,3 +359,13 @@ Tickets
         >  npm install
         >  docker build -t ps07/tickets .
         >  docker push ps07/tickets
+
+    Routes 
+        index.ts - GET all tickets
+        show.ts - GET a ticket with specific id
+        new.ts - POST (create) a new ticket
+        update.ts - PUT (update) an existing ticket
+    
+    Testing
+        dir - routes/__test__
+        one file each for testing all 4 routes
