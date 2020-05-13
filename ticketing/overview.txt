@@ -369,3 +369,21 @@ Tickets
     Testing
         dir - routes/__test__
         one file each for testing all 4 routes
+
+
+NATS Streaming Server
+
+
+NATS-test
+    Initialization
+        >  npm init -y
+        >  npm install node-nats-streaming ts-node-dev typescript @types/node
+        >  tsc --init
+        package.json edit:
+            "scripts": {
+                "publish": "ts-node-dev --notify false src/publisher.ts",
+                "listen": "ts-node-dev --notify false src/listener.ts"
+            },
+        >  kubectl get pods     (get the nats pod: {pod})
+        >  kubectl port-forward {pod} 4222:4222     (keep it running)
+        >  npm run publish      (in new terminal)
