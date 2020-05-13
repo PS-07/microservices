@@ -6,6 +6,7 @@ import { errorHandler, NotFoundError, currentUser } from '@pstickets/common';
 import { createTicketRouter } from './routes/new';
 import { showTicketRouter } from './routes/show';
 import { indexTicketRouter } from './routes/index';
+import { updateTicketRouter } from './routes/update';
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use(currentUser);
 app.use(createTicketRouter);
 app.use(showTicketRouter);
 app.use(indexTicketRouter);
+app.use(updateTicketRouter);
 
 // NotFoundError will be thrown incase of any invalid URL
 // since all 4 valid routes have been checked prior to this, any other

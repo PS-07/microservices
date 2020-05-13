@@ -13,7 +13,7 @@ router.post('/api/tickets', requireAuth,
             .withMessage('Title is required'),
         body('price')
             .isFloat({ gt: 0 })
-            .withMessage('Price must be greater than 0')
+            .withMessage('Price must be provided and  must be greater than 0')
     ],
     validateRequest,
     async (req: Request, res: Response) => {

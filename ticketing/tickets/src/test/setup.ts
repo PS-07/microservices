@@ -48,7 +48,7 @@ afterAll(async () => {
 global.getCookie = () => {
     // build a JWT payload: { id, email }
     const payload = {
-        id: 'ion2o3r4',
+        id: new mongoose.Types.ObjectId().toHexString(),
         email: 'test958@test.com'
     };
 
