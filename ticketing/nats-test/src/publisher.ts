@@ -1,5 +1,8 @@
 import nats from 'node-nats-streaming';
 
+console.clear();
+
+// 2nd arg is ClientId, stored in NATS SS
 const stan = nats.connect('ticketing', 'abc', {
     url: 'http://localhost:4222'
 });

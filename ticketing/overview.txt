@@ -386,4 +386,5 @@ NATS-test
             },
         >  kubectl get pods     (get the nats pod: {pod})
         >  kubectl port-forward {pod} 4222:4222     (keep it running)
-        >  npm run publish      (in new terminal)
+        >  npm run publish      (in new terminal)   can be restarted using 'rs'
+        >  npm run listen       (in new terminal)   can be restarted using 'rs'
