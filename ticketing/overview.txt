@@ -388,3 +388,6 @@ NATS-test
         >  kubectl port-forward {pod} 4222:4222     (keep it running)
         >  npm run publish      (in new terminal)   can be restarted using 'rs'
         >  npm run listen       (in new terminal)   can be restarted using 'rs'
+        >  kubectl port-forward {pod} 8222:8222     (Monitoring)
+        goto - http://localhost:8222/streaming
+        channel info - http://localhost:8222/streaming/channelsz?subs=1
