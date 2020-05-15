@@ -372,7 +372,40 @@ Tickets
         one file each for testing all 4 routes
 
 
-NATS Streaming Server
+NATS Streaming Server (Event bus)
+    Services publishes an event to a channel and other services 
+    subscibes to that channel to listen the event
+    ex. Tickets service publishes a TicketUpdatedEvent to ticket:updated channel
+        and Orders service subscibes to ticket:updated channel to listen the event
+
+    Subscription Options
+        The service that subscibes to a channel has several options
+        - setManualAckMode(true): manual acknowledgement of message
+        - setAckWait(millis): number of milliseconds before a message is considered unacknowledged
+        - setDeliverAllAvailable(): configures the subscription to replay from first available message
+        - setDurableName(durableName): if service restart, it can acknowledge the leftver messages
+
+    Queue Group
+        NATS creates a group of subscrbers under the same Queue Group name
+        a service can have multiple listeners and an event can go to either of them
+
+    Solving Concurrency issues
+        Network request to CRUD resource XYZ -> Serice that owns XYZ (-> db storing XYZ)
+        -> Event describing change to XYZ -> NATS SS -> Event -> Service that needs to update its data
+
+        In ticketing
+            - browser sends a requests: { ticketId: 'CZQ', price: 50 } & { ticketId: 'CZQ', price: 100 }
+            - goes to ticket service, that stores it in Tickets db as
+              { ticketId: 'CZQ', price: 50, version: 1 } 
+              { ticketId: 'CZQ', price: 50, version: 2 }    (versiion is incremented if ticket is updated)
+            - ticket service emits events:
+              ticket:created { id: 'CZQ', price: 50, version: 1 } - goes to ticket:created channel in NATS
+              ticket:updated { id: 'CZQ', price: 100, version: 2 } - goes to ticket:updated channel in NATS
+            - orders services has subscibed to both ticket:created and ticket:updated channels
+              it has multiple listeners (say two, A and B)
+            - order service receives the events and update info in Orders db iff db.id.version = event.version - 1
+              so if ticket:created event fails for some reason, the Order db would not store ticket:updated data (sice version: 2)
+              hence we store data in correct order and Concurrency issues are sorted
 
 
 NATS-test
@@ -392,3 +425,9 @@ NATS-test
         >  kubectl port-forward {pod} 8222:8222     (Monitoring)
         goto - http://localhost:8222/streaming
         channel info - http://localhost:8222/streaming/channelsz?subs=1
+
+    Connection
+        To connect publisher to the NATS pod inside the cluster, port forwarding is used 
+        on port 4222. monitoring is done done on port 8222. it is similar to NodePort service
+        >  kubectl port-forward {pod} 4222:4222
+        >  kubectl port-forward {pod} 8222:8222
