@@ -10,13 +10,17 @@ const stan = nats.connect('ticketing', 'abc', {
 
 // after stan (client) successfully connects to the NATS streaming server,
 // it is going to emit a 'connect' event, so we listen for it
-stan.on('connect', () => {
+stan.on('connect', async () => {
     console.log('Publisher connected to NATS');
 
     const publisher = new TicketCreatedPublisher(stan);
-    publisher.publish({
-        id: '107',
-        title: 'standup',
-        price: 20
-    });
+    try {
+        await publisher.publish({
+            id: '107',
+            title: 'standup',
+            price: 20
+        });
+    } catch (err) {
+        console.error(err);
+    }
 });

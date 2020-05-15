@@ -317,6 +317,7 @@ Common
         >  npm init -y
         >  npm install express express-validator cookie-session jsonwebtoken
         >  npm install @types/cookie-session @types/express @types/jsonwebtoken
+        >  npm install node-nats-streaming
         package.json edit:
             "name": "@pstickets/common",
             "main": "./build/index.js",
