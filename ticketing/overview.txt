@@ -432,3 +432,15 @@ NATS-test
         on port 4222. monitoring is done done on port 8222. it is similar to NodePort service
         >  kubectl port-forward {pod} 4222:4222
         >  kubectl port-forward {pod} 8222:8222
+
+
+Orders
+    Initialization
+        Copy: src/app.ts, src/index.ts, src/nats-wrapper.ts, .dockerignore, Dockerfile, 
+              package.json, package-lock.json, tsconfig.json from tickets dir
+              (Remove unecessary code from all the files)
+        package.json edit:
+            "name": "orders"
+        >  npm install
+        >  docker build -t ps07/orders .
+        >  docker push ps07/orders
