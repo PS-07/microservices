@@ -360,6 +360,7 @@ Tickets
         >  npm install
         >  docker build -t ps07/tickets .
         >  docker push ps07/tickets
+        >  npm install @pstickets/common
 
     Routes 
         index.ts - GET all tickets
