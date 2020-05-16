@@ -25,4 +25,5 @@ class NatsWrapper {
     }
 }
 
+// returns a common instance of NatsWrapper to be used everywhere in the app
 export const natsWrapper = new NatsWrapper();

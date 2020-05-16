@@ -312,6 +312,7 @@ Code Sharing
     Install package: >  npm install @pstickets/common       (in other dirs)
     Update package:  >  npm update @pstickets/common    (when an change is made in common dir code)
 
+
 Common
     Initialization
         >  npm init -y
@@ -343,34 +344,6 @@ Common
         >  tsc
         >  npm run pub
 
-Tickets
-    Structure
-            Route            Method          Body                 Purpose
-        /api/tickets          GET            ----           Retrieve all tickets
-        /api/tickets/:id      GET            ----           Retrieve ticket with specific ID
-        /api/tickets          POST      { title, price }    Create a ticket
-        /api/tickets          PUT       { title, price }    Edit a ticket
-
-    Initialization
-        Copy: src/app.ts, src/index.ts, src/test, .dockerignore, Dockerfile, 
-              package.json, package-lock.json, tsconfig.json from auth dir
-              (Remove unecessary code from all the files)
-        package.json edit:
-            "name": "tickets"
-        >  npm install
-        >  docker build -t ps07/tickets .
-        >  docker push ps07/tickets
-        >  npm install @pstickets/common
-
-    Routes 
-        index.ts - GET all tickets
-        show.ts - GET a ticket with specific id
-        new.ts - POST (create) a new ticket
-        update.ts - PUT (update) an existing ticket
-    
-    Testing
-        dir - routes/__test__
-        one file each for testing all 4 routes
 
 
 NATS Streaming Server (Event bus)
@@ -434,13 +407,92 @@ NATS-test
         >  kubectl port-forward {pod} 8222:8222
 
 
+Tickets
+    Structure
+            Route            Method          Body                 Purpose
+        /api/tickets          GET            ----           Retrieve all tickets
+        /api/tickets/:id      GET            ----           Retrieve ticket with specific ID
+        /api/tickets          POST      { title, price }    Create a ticket
+        /api/tickets          PUT       { title, price }    Edit a ticket
+
+    Initialization
+        Copy: src/app.ts, src/index.ts, src/test, .dockerignore, Dockerfile, 
+              package.json, package-lock.json, tsconfig.json from auth dir
+              (Remove unecessary code from all the files)
+        package.json edit:
+            "name": "tickets"
+        create infra/k8s/tickets-depl.yaml and infra/k8s/tickets-mongo-depl.yaml
+        update the skaffold.yaml and infra/k8s/ingress-srv.yaml files
+        >  npm install
+        >  docker build -t ps07/tickets .
+        >  docker push ps07/tickets
+        >  npm install @pstickets/common
+
+    Routes 
+        index.ts - GET all tickets
+        show.ts - GET a ticket with specific id
+        new.ts - POST (create) a new ticket
+        update.ts - PUT (update) an existing ticket
+    
+    Testing
+        dir - routes/__test__
+        one file each for testing all 4 routes
+
+    NATS Client Singleton
+        dir - src/nats-wrapper.ts
+        use - creates a class NatsWrapper with var: _client(Stan) and func: connect()
+                connect(clusterId, clientId, url): Promise
+                NATS_CLUSTER_ID=ticketing, NATS_CLIENT_ID={pod_name}, NATS_URL=http://nats-srv:4222
+                are stored as environment variables in infra/k8s/tickets-depl.yaml
+              an object of the class (common instance) is passed to everywhere in the app: 
+              src/index.ts         - connects to NATS SS
+              src/routes/new.ts    - publish an event after ticket is saved to the database
+              src/routes/update.ts - publish an event after ticket is saved to the database
+
+    Fixing Test suite
+        To test the 'publish an event' function ability in routes/new.ts and routes/update.ts,
+        we need an instance of NATS client in the testing suite. To do this, we will use Jest to create
+        a fake initialized NATS client of NatsWrapper. Jest intercepts the import statements of new.ts and update.ts
+        to get natsWrapper and create a fake instance. Steps:
+        - file to fake: src/nats-wrapper.ts
+        - create src/__mocks__ folder in same dir
+        - create file with identical name: src/__mocks__/nats-wrapper.ts
+          fake the client.publish() function
+        - tell Jest to use the fake file for testing
+          in src/test/setup.ts: add jest.mock('../nats-wrapper');
+        - use the fake NATS implementation
+          in src/routes/__test__/new.test.ts and src/routes/__test__/update.test.ts,
+          add: import { natsWrapper } from '../../nats-wrapper';
+          Jest will mock this fiile to use the fake one and we can test the functionality by:
+            expect(natsWrapper.client.publish).toHaveBeenCalled();
+
+
 Orders
+    Resources
+        Order: { userId, status, expiresAt, ticketId }
+                userId - user who created this order and is trying to buy a ticket
+                status - expired / paid / pending
+                expiresAt - time at which order expires (15 min)
+                ticketId - ID of the ticket user is trying to buy
+        since we have to lookup at ticket to buy an order, we replicate the Tickets db in order service
+        to do this, orders service subscibes to ticket:created and ticket:updated (events by tickets service) channels in NATS SS
+        Ticket: { title, price, version }
+
+    Structure
+            Route            Method         Body                 Purpose
+        /api/orders          GET            ----         Retrieve all orders for user maing the request
+        /api/orders/:id      GET            ----         Retrieve order with specific ID
+        /api/orders          POST        { ticketId }    Create an order to purchase specific ticket
+        /api/orders/:id      DELETE         ----         Cancel the order
+
     Initialization
         Copy: src/app.ts, src/index.ts, src/nats-wrapper.ts, .dockerignore, Dockerfile, 
               package.json, package-lock.json, tsconfig.json from tickets dir
               (Remove unecessary code from all the files)
         package.json edit:
             "name": "orders"
+        create infra/k8s/orders-depl.yaml and infra/k8s/orders-mongo-depl.yaml
+        update the skaffold.yaml and infra/k8s/ingress-srv.yaml files
         >  npm install
         >  docker build -t ps07/orders .
         >  docker push ps07/orders
