@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
 import { OrderStatus } from '@pstickets/common';
+import { TicketDoc } from './ticket';
+
+export { OrderStatus };
 
 interface OrderAttrs {
     userId: string;
@@ -32,7 +35,7 @@ const orderSchema = new mongoose.Schema({
     },
     expiresAt: {
         type: mongoose.Schema.Types.Date
-    }
+    },
     ticket: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Ticket'
