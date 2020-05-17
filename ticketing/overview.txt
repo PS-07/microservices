@@ -214,7 +214,7 @@ Fetching data during SSR
         and it is forwarded to Ingress-Nginx, and then to appropriate service
 
     Request by server (in Client pod)
-        dir = client/api/build-client.js
+        dir - client/api/build-client.js
         Problem
         When server (NextJS app) makes a request, say [GET /api/users/currentuser],
         the node's networking layer adds a default baseUrl: [GET localhost:80/api/users/currentuser],
@@ -343,6 +343,17 @@ Common
             }
         >  tsc
         >  npm run pub
+
+    Order status
+        dir - common/src/events/types/order-status.ts
+        use - All possible order status
+              Created - When the order has been created, but the ticket it is 
+                        trying to order has not been reserved
+              Cancelled - The ticket the order is trying to reserve has already been reserved or
+                          When the user has cancelled the order or
+                          The order expires before the payment
+              AwaitingPayment - The order has successfully reserved the ticket
+              Complete - The order has reserved the ticket and the user has provided payment successfully
 
 
 
