@@ -1,0 +1,37 @@
+POST https://ticketing.dev/api/users/signup
+Content-Type: application/json
+
+{
+    "email": "testing1@test.com",
+    "password": "password"
+}
+
+###
+POST https://ticketing.dev/api/users/signin
+Content-Type: application/json
+
+{
+    "email": "testing1@test.com",
+    "password": "password"
+}
+
+###
+GET https://ticketing.dev/api/users/currentuser
+
+###
+POST https://ticketing.dev/api/tickets
+Content-Type: application/json
+
+{
+    "title": "movie",
+    "price": 70
+}
+
+###
+PUT https://ticketing.dev/api/tickets/5ec3b7891c8c540025fa9709
+Content-Type: application/json
+
+{
+    "title": "movie",
+    "price": 80
+}
