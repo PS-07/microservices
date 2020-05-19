@@ -23,15 +23,15 @@ POST https://ticketing.dev/api/tickets
 Content-Type: application/json
 
 {
-    "title": "movie",
-    "price": 70
+    "title": "concert",
+    "price": 60
 }
 
 ###
-PUT https://ticketing.dev/api/tickets/5ec3b7891c8c540025fa9709
+PUT https://ticketing.dev/api/tickets/5ec402f7a4c697001915c589
 Content-Type: application/json
 
 {
-    "title": "movie",
-    "price": 80
+    "title": "concert",
+    "price": 30
 }

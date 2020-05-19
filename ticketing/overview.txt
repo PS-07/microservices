@@ -508,3 +508,4 @@ Orders
         >  npm install
         >  docker build -t ps07/orders .
         >  docker push ps07/orders
+        >  npm install mongoose-update-if-current
