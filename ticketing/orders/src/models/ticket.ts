@@ -58,7 +58,7 @@ ticketSchema.statics.findByEvent = (event: { id: string, version: number }) => {
     });
 };
 
-// methods is used to add a new method to a Model
+// methods is used to add a new method to a Document
 // run query to look at all the orders. find an order where the ticket 
 // is the ticket we just found and the order status is not cancelled
 // if we find such an order, that means the ticket is reserved
