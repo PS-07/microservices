@@ -418,6 +418,8 @@ NATS-test
         >  kubectl port-forward {pod} 8222:8222
 
 
+Events
+
 Tickets
     Structure
             Route            Method          Body                 Purpose
