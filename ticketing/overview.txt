@@ -432,6 +432,22 @@ Events
             - payments service: user might submit a payment for the created order
             - expiration service: start a timer (15 min) after which the order expires
 
+    order:cancelled
+        publisher - orders service
+        listeners:
+            - tickets service: the corrsponding ticket should be unreserved, so it can be edited again
+            - payments service: incoming payments for this order should be rejected
+
+    Code
+        Event interface
+        dir - common/src/events
+        there is a file for each event that exports an interface corresponding do the event,
+        that describes the subject and data.
+
+        Publisher/Listener class
+        dir - {microservice}/src/events
+        
+
 
 Tickets
     Structure
