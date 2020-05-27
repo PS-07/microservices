@@ -579,7 +579,9 @@ Expiration
         - listens to order:created event
         - BullJS library is used (for timers)
           it reminds us to do some task after some duration (15 min)
-          it stores the list of jobs in an instance of redis server, a in memory database
+          a expirationQueue is maintained in the microservice and jobs are sent to a 
+          redis server (in memory database) which notifies when a job is completed (15 min)
+          the list of jobs in an instance of redis server
         - publishes expiration:complete event
 
     Initialization

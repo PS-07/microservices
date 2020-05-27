@@ -35,3 +35,11 @@ Content-Type: application/json
     "title": "concert",
     "price": 30
 }
+
+###
+POST https://ticketing.dev/api/orders
+Content-Type: application/json
+
+{
+    "ticketId": "5eced5759672ba00236aa5b7"
+}

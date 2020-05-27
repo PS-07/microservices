@@ -6,7 +6,7 @@ export default ({ req }) => {
         // the baseUrl is extracted from Ingress-Nginx's pod
         // req.headers is also passed since it contains cookies
         return axios.create({
-            baseURL: 'http://172.17.0.2',
+            baseURL: 'http://172.17.0.6',
             headers: req.headers
         });
     }
