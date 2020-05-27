@@ -448,6 +448,12 @@ Events
             - tickets service: the corrsponding ticket should be unreserved, so it can be edited again
             - payments service: incoming payments for this order should be rejected
 
+    expiration:complete
+        publisher - expiration service
+        listeners:
+            - orders service: needs to know 15 min time limit is over, then it can decide whether
+                              or not to cancel the order (it might have already been paid)
+
     Code
         Event interface
         dir - common/src/events
@@ -566,3 +572,21 @@ Orders
         >  docker build -t ps07/orders .
         >  docker push ps07/orders
         >  npm install mongoose-update-if-current
+
+
+Expiration
+    Function
+        - listens to order:created event
+        - BullJS library is used (for timers)
+          it reminds us to do some task after some duration (15 min)
+          it stores the list of jobs in an instance of redis server, a in memory database
+        - publishes expiration:complete event
+
+    Initialization
+        Copy: src/index.ts, src/nats-wrapper.ts, src/__mocks__ folder, 
+              dockerignore, Dockerfile, package.json, tsconfig.json from tickets dir
+              (Remove unecessary code from all the files)
+        >  npm install
+        >  npm install bull @types/bull
+        >  docker build -t ps07/expiration .
+        >  docker push ps07/expiration
