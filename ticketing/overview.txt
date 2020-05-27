@@ -382,7 +382,7 @@ NATS Streaming Server (Event bus)
             - browser sends a requests: { ticketId: 'CZQ', price: 50 } & { ticketId: 'CZQ', price: 100 }
             - goes to ticket service, that stores it in Tickets db as
               { ticketId: 'CZQ', price: 50, version: 1 } 
-              { ticketId: 'CZQ', price: 50, version: 2 }    (versiion is incremented if ticket is updated)
+              { ticketId: 'CZQ', price: 50, version: 2 }    (version is incremented if ticket is updated)
             - ticket service emits events:
               ticket:created { id: 'CZQ', price: 50, version: 1 } - goes to ticket:created channel in NATS
               ticket:updated { id: 'CZQ', price: 100, version: 2 } - goes to ticket:updated channel in NATS
@@ -421,9 +421,19 @@ NATS-test
 Events
     Events published by each service
         tickets    - ticket:created, ticket:updated 
-        orders     - order:created, order:updated
+        orders     - order:created, order:cancelled
         payments   - charge:created
         expiration - expiration:complete
+
+    ticket:created
+        publisher - tickets service
+        listeners:
+            - orders service: needs to have info about the ticket
+
+    ticket:updated 
+        publisher - tickets service
+        listeners:
+            - orders service: needs to know updated info and if ticket is reserved successfully
 
     order:created
         publisher - orders service
@@ -441,12 +451,28 @@ Events
     Code
         Event interface
         dir - common/src/events
+        contains abstact base-publisher and base-listener classes
         there is a file for each event that exports an interface corresponding do the event,
         that describes the subject and data.
 
         Publisher/Listener class
         dir - {microservice}/src/events
-        
+        a class for each publisher/listener corresponding to each event is exported
+        it extends the base-publisher/base-listener class with event as the parameter
+
+        to publish/listen an event, create an instance of the class
+        ex. publish events from some route 
+            >  new OrderCreatedPublisher(natsWrapper.client).publish(...);
+            listen to events in src/index.ts file of the microservice
+            >  new TicketCreatedListener(natsWrapper.client).listen();
+
+    Versioning records
+        all the tickets needs to be versioned to avoid concurrency issues
+        the tickets database in both tickets and orders microservice should have same ticket versions
+        ticket:created event gives a version = 1 to the ticket
+        any further changes (ticket:updated), increments the version by 1
+
+        'mongoose-update-if-current' helps in versioning
 
 
 Tickets
