@@ -602,14 +602,18 @@ Expiration
 
 
 Payments
+    Resources
+        orders: { id, status, version, userId, price }
+        charges: 
     Initialization
-    Copy: src/app.ts, src/index.ts, src/nats-wrapper.ts, src/__mocks__ dir, src/test dir
-              dockerignore, Dockerfile, package.json, tsconfig.json from tickets dir
-              (Remove unecessary code from all the files)
-    >  npm install
-    >  docker build -t ps07/payments .
-    >  docker push ps07/payments
-    >  npm update @pstickets/common
+        Copy: src/app.ts, src/index.ts, src/nats-wrapper.ts, src/__mocks__ dir, src/test dir
+                dockerignore, Dockerfile, package.json, tsconfig.json from tickets dir
+                (Remove unecessary code from all the files)
+        >  npm install
+        >  docker build -t ps07/payments .
+        >  docker push ps07/payments
+        >  npm update @pstickets/common
+        >  npm install mongoose-update-if-current
 
     Events
         publishers:
