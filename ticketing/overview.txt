@@ -593,3 +593,27 @@ Expiration
         >  docker build -t ps07/expiration .
         >  docker push ps07/expiration
         >  npm update @pstickets/common
+
+    Events
+        publishers:
+            expiration:complete - order expires after 15 min and is cancelled
+        listeners:
+            order:created - start a timer (15 min) after which the order expires
+
+
+Payments
+    Initialization
+    Copy: src/app.ts, src/index.ts, src/nats-wrapper.ts, src/__mocks__ dir, src/test dir
+              dockerignore, Dockerfile, package.json, tsconfig.json from tickets dir
+              (Remove unecessary code from all the files)
+    >  npm install
+    >  docker build -t ps07/payments .
+    >  docker push ps07/payments
+    >  npm update @pstickets/common
+
+    Events
+        publishers:
+            charge:created - someone has paid for the order
+        listeners:
+            order:created - user might submit a payment for the created order
+            order:cancelled - incoming payments for this order should be rejected
