@@ -592,3 +592,4 @@ Expiration
         >  npm install bull @types/bull
         >  docker build -t ps07/expiration .
         >  docker push ps07/expiration
+        >  npm update @pstickets/common
