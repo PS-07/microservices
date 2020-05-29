@@ -3,6 +3,7 @@ import 'express-async-errors';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 import { errorHandler, NotFoundError, currentUser } from '@pstickets/common';
+import { createChargeRouter } from './routes/new';
 
 const app = express();
 
@@ -22,6 +23,8 @@ app.use(
     })
 );
 app.use(currentUser);
+
+app.use(createChargeRouter);
 
 // NotFoundError will be thrown incase of any invalid URL
 // since all 4 valid routes have been checked prior to this, any other

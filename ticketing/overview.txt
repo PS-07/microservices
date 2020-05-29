@@ -614,6 +614,13 @@ Payments
         >  docker push ps07/payments
         >  npm update @pstickets/common
         >  npm install mongoose-update-if-current
+        >  npm install stripe
+        create an account on https://stripe.com
+        get the secret key from 'Get your test API keys' and store it as a secret object
+        >  kubectl create secret generic stripe-secret --from-literal STRIPE_KEY={Secret key}
+        >  kubectl get secrets
+        add the STRIPE_KEY to the payments pod as an environment variable (in infra/k8s/payments-depl.yaml)
+        create a stripe instance in src/stripe.ts
 
     Events
         publishers:

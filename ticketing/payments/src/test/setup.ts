@@ -8,7 +8,7 @@ import { app } from '../app';
 declare global {
     namespace NodeJS {
         interface Global {
-            getCookie(): string[];
+            getCookie(id?: string): string[];
         }
     }
 }
@@ -48,10 +48,10 @@ afterAll(async () => {
 // since a cookie is generated when a user signup/signin, so we will have to replicate it
 // for testing. but then we would use auth service. since we should avoid communication between
 // microservices, we will generate a cookie with some other fake way (with using auth service)
-global.getCookie = () => {
+global.getCookie = (id?: string) => {
     // build a JWT payload: { id, email }
     const payload = {
-        id: new mongoose.Types.ObjectId().toHexString(),
+        id: id || new mongoose.Types.ObjectId().toHexString(),
         email: 'test958@test.com'
     };
 

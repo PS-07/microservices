@@ -21,6 +21,9 @@ const start = async () => {
     if (!process.env.NATS_CLUSTER_ID) {
         throw new Error('MONGO_URI must be defined');
     }
+    if (!process.env.STRIPE_KEY) {
+        throw new Error('STRIPE_KEY must be defined');
+    }
 
     // mongoose is used to connect to a MongoDb instance
     // using the ClusterIP service of the database (auth-mongo-srv)
