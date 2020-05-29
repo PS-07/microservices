@@ -422,7 +422,7 @@ Events
     Events published by each service
         tickets    - ticket:created, ticket:updated 
         orders     - order:created, order:cancelled
-        payments   - charge:created
+        payments   - payment:created
         expiration - expiration:complete
 
     ticket:created
@@ -453,6 +453,12 @@ Events
         listeners:
             - orders service: needs to know 15 min time limit is over, then it can decide whether
                               or not to cancel the order (it might have already been paid)
+
+    payment:created
+        publisher - payments service
+        listeners:
+            - orders service: needs to know that the order has been paid for
+            
 
     Code
         Event interface
@@ -625,7 +631,7 @@ Payments
 
     Events
         publishers:
-            charge:created - someone has paid for the order
+            payment:created - someone has paid for the order
         listeners:
             order:created - user might submit a payment for the created order
             order:cancelled - incoming payments for this order should be rejected
