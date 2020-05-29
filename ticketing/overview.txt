@@ -621,6 +621,7 @@ Payments
         >  kubectl get secrets
         add the STRIPE_KEY to the payments pod as an environment variable (in infra/k8s/payments-depl.yaml)
         create a stripe instance in src/stripe.ts
+        for testing, use "token": "tok_visa"
 
     Events
         publishers:

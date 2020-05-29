@@ -24,7 +24,7 @@ Content-Type: application/json
 
 {
     "title": "concert",
-    "price": 60
+    "price": 40
 }
 
 ###
@@ -41,11 +41,14 @@ POST https://ticketing.dev/api/orders
 Content-Type: application/json
 
 {
-    "ticketId": "5ecfc8e7c66d6c0023054527"
+    "ticketId": "5ed05c448056f00023048add"
 }
 
 ###
 POST https://ticketing.dev/api/payments
 Content-Type: application/json
 
-{}
+{
+    "orderId": "5ed05c4ac4f75b0018055ca0",
+    "token": "tok_visa"
+}
