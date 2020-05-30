@@ -609,8 +609,23 @@ Expiration
 
 Payments
     Resources
-        orders: { id, status, version, userId, price }
-        charges: 
+        order: { id, status, version, userId, price }
+        payment: { orderId, stripeId } 
+
+    Function
+        - listens to order:created and order:cancelled event
+        - replicates order data from the listened events and stores it in a orders database
+          StripeJS library is used for managing payments. 
+          following steps are involved in the process:
+            - user enterns their credit card details
+            - Stripe API returns a token to be used for making the payment
+            - create a charge request with { token, orderId }
+            - find the order user is trying to pay for
+            - make sure that the order belongs to the user and the amount is correct
+            - charge the user's credit card using the Stripe API
+            - create payment record to store the successful payment
+        - publishes payment:complete event
+
     Initialization
         Copy: src/app.ts, src/index.ts, src/nats-wrapper.ts, src/__mocks__ dir, src/test dir
                 dockerignore, Dockerfile, package.json, tsconfig.json from tickets dir
